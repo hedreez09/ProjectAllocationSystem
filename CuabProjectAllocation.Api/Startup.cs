@@ -1,7 +1,9 @@
+using CuabProjectAllocation.Core.Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,6 +30,9 @@ namespace CuabProjectAllocation.Api
         {
 
             services.AddControllers();
+            services.AddDbContext<CuabDbContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("CuabProjAllocationDb")));
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CuabProjectAllocation.Api", Version = "v1" });
