@@ -26,7 +26,7 @@ namespace CuabProjectAllocation.Infrastructure.Entities
         /// <summary>
         /// Account Status, Registration Status
         /// </summary>
-        public RegistrationStatusEnum AccountStatus { get; set; }
+        public RegistrationStatusEnum AccountConfirmationStatus { get; set; }
         /// <summary>
         /// Status, Application User Status
         /// </summary>

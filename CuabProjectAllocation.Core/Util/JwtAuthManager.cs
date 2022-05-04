@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -15,6 +16,7 @@ namespace CuabProjectAllocation.Core.Util
 {
     public class JwtAuthManager : IJwtAuthManager
     {
+        public IImmutableDictionary<string, RefreshToken> UsersRefreshTokensReadOnlyDictionary => _usersRefreshTokens.ToImmutableDictionary();
         private readonly ConcurrentDictionary<string, RefreshToken> _usersRefreshTokens;
         private readonly JwtTokenConfig _jwtTokenConfig;
         private readonly byte[] _secret;
@@ -22,6 +24,8 @@ namespace CuabProjectAllocation.Core.Util
         public JwtAuthManager(JwtTokenConfig jwtTokenConfig)
         {
             _jwtTokenConfig = jwtTokenConfig;
+            _usersRefreshTokens = new ConcurrentDictionary<string, RefreshToken>();
+            _secret = Encoding.ASCII.GetBytes(_jwtTokenConfig.Secret);
         }
 
         public (ClaimsPrincipal, JwtSecurityToken) DecodeJwtToken(string token)
@@ -100,6 +104,24 @@ namespace CuabProjectAllocation.Core.Util
             }
 
             return GenerateTokens(userName, principal.Claims.ToArray(), now);
+        }
+
+        public void RemoveExpiredRefreshTokens(DateTime now)
+        {
+            var expiredTokens = _usersRefreshTokens.Where(x => x.Value.ExpireAt < now).ToList();
+            foreach (var refreshToken in expiredTokens)
+            {
+                _usersRefreshTokens.TryRemove(refreshToken.Key, out _);
+            }
+        }
+
+        public void RemoveRefreshTokenByUsername(string username)
+        {
+            var refreshTokens = _usersRefreshTokens.Where(x => x.Value.Username == username).ToList();
+            foreach(var refreshToken in refreshTokens)
+            {
+                _usersRefreshTokens.TryRemove(refreshToken.Key, out _);
+            }
         }
 
         private static string GenerateRefreshTokenString()

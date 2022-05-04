@@ -16,7 +16,7 @@ namespace CuabProjectAllocation.Infrastructure.Configuration
             builder.HasKey(t => t.Id);
 
             builder.Property(t => t.UserType).HasConversion<string>().IsRequired();
-            builder.Property(t => t.AccountStatus).HasConversion<string>().IsRequired();
+            builder.Property(t => t.AccountConfirmationStatus).HasConversion<string>().IsRequired();
 
             builder.Property(t => t.Username).IsRequired().HasMaxLength(250);
             builder.Property(t => t.EmailAddress).IsRequired().HasMaxLength(250);
