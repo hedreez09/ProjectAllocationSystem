@@ -1,12 +1,8 @@
-﻿using CuabProjectAllocation.Core.Common;
-using CuabProjectAllocation.Core.Enums;
+﻿using CuabProjectAllocation.Infrastructure;
+using CuabProjectAllocation.Infrastructure.Enums;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace CuabProjectAllocation.Core.Entities
+namespace CuabProjectAllocation.Infrastructure.Entities
 {
     public class ProposalEntry: Entity<Guid>
     {

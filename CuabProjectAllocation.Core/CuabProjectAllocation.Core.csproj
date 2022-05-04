@@ -13,4 +13,12 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Common\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CuabProjectAllocation.Infrastructure\CuabProjectAllocation.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

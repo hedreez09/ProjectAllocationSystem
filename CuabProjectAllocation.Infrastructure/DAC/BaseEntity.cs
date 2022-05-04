@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CuabProjectAllocation.Core.Common
+namespace CuabProjectAllocation.Infrastructure
 {
     /// <summary>
     /// Class BaseEntity

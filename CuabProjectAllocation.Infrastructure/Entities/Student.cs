@@ -1,11 +1,11 @@
-﻿using CuabProjectAllocation.Core.Common;
+﻿using CuabProjectAllocation.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CuabProjectAllocation.Core.Entities
+namespace CuabProjectAllocation.Infrastructure.Entities
 {
     public class Student: Entity<Guid>
     {

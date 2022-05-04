@@ -1,11 +1,6 @@
-﻿using CuabProjectAllocation.Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
-namespace CuabProjectAllocation.Core.Common
+namespace CuabProjectAllocation.Infrastructure
 {
     public abstract class Entity<TId> : BaseEntity, IEquatable<Entity<TId>>
     {

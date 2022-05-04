@@ -1,13 +1,8 @@
-﻿using CuabProjectAllocation.Core.Configuration;
-using CuabProjectAllocation.Core.Entities;
+﻿using CuabProjectAllocation.Infrastructure.Configuration;
+using CuabProjectAllocation.Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace CuabProjectAllocation.Core.Common
+namespace CuabProjectAllocation.Infrastructure.DAC
 {
     public class CuabDbContext: DbContext
     {

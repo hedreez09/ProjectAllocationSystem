@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CuabProjectAllocation.Core.Enums
+namespace CuabProjectAllocation.Infrastructure.Enums
 {
     public enum RegistrationStatusEnum
     {
