@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CuabProjectAllocation.Infrastructure.Enums
+namespace CuabProjectAllocation.Core.Interface
 {
-    public enum ProposalTypeEnum
+    public interface IAuthService
     {
-        Siwes = 1,
-        Project
+
     }
 }

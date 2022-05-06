@@ -8,13 +8,13 @@ namespace CuabProjectAllocation.Infrastructure.Enums
 {
     public enum RegistrationStatusEnum
     {
-        Pending,
+        Pending = 1,
         Activated
     }
 
     public enum UserType
     {
-        Student,
+        Student = 1,
         Staff,
         Admin,
         SuperAdmin

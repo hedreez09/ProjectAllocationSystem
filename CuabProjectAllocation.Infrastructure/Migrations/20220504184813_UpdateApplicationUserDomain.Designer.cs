@@ -4,14 +4,16 @@ using CuabProjectAllocation.Infrastructure.DAC;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CuabProjectAllocation.Infrastructure.Migrations
 {
     [DbContext(typeof(CuabDbContext))]
-    partial class CuabDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220504184813_UpdateApplicationUserDomain")]
+    partial class UpdateApplicationUserDomain
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

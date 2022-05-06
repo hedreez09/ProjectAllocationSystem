@@ -18,10 +18,12 @@ namespace CuabProjectAllocation.Core.Util
             //Repository Mapping
             services.AddScoped<IEntityRepository<ApplicationUser>, EntityRepository<ApplicationUser>>();
             services.AddScoped<IEntityRepository<Student>, EntityRepository<Student>>();
+            services.AddScoped<IEntityRepository<Lecturer>, EntityRepository<Lecturer>>();
 
 
             //Service Managers
             services.AddScoped<IUserService, UserService>();
+            
         }
     }
 }

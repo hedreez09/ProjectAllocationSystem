@@ -8,7 +8,7 @@ namespace CuabProjectAllocation.Infrastructure.Enums
 {
     public enum ProposalStatusEnum
     {
-        Pending,
+        Pending = 1,
         Processing,
         Rejected,
         SupervisorApproved,

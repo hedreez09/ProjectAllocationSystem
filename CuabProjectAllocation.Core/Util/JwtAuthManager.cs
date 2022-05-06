@@ -79,7 +79,7 @@ namespace CuabProjectAllocation.Core.Util
             return new JwtAuthResult
             {
                 AccessToken = accessToken,
-                ExpirationTime = now.AddMinutes(_jwtTokenConfig.AccessTokenExpiration).ToString(),
+                ExpirationTime = now.AddMinutes(_jwtTokenConfig.AccessTokenExpiration),
                 RefreshToken = refreshToken
             };
         }

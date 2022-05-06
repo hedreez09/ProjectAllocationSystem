@@ -16,13 +16,8 @@ namespace CuabProjectAllocation.Infrastructure.Entities
         /// <summary>
         /// PasswordHash, User's password hash
         /// </summary>
-        public string PasswordHash { get; set; }         
-              
-        ///<summary
-        /// Password Salt, hashed password salt
-        ///</summary>        
-        public string PasswordSalt { get; set; }
-
+        public string PasswordHash { get; set; }        
+      
         /// <summary>
         /// Account Status, Registration Status
         /// </summary>
@@ -34,7 +29,7 @@ namespace CuabProjectAllocation.Infrastructure.Entities
         /// <summary>
         /// LoginFailedCount, Failed login count
         /// </summary>
-        public int LoginFailedCount { get; set; }
+        public int FailedLoginCount { get; set; }
         /// <summary>
         /// LockoutEnabled, Lockout status after multiple login failure
         /// </summary>

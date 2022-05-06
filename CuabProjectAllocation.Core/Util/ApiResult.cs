@@ -19,7 +19,7 @@ namespace CuabProjectAllocation.Core.Util
             eventId = helper.GenerateRadomNumber().ToString();            
         }
         public ErrorResponse error { get; set; }
-        public string message { get; set; }    
+        public bool hasMessage { get; set; }    
         public int requestStatus { get; set; }
         public DateTime  timeGenerated { get; set; }
         public string eventId { get; set; }

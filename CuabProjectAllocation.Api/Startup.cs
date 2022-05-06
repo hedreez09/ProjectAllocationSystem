@@ -38,7 +38,8 @@ namespace CuabProjectAllocation.Api
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CuabProjectAllocation.Api", Version = "v1" });
             });
 
-            services.AddSingleton<IJwtAuthManager, JwtAuthManager>();            
+            services.AddSingleton<IJwtAuthManager, JwtAuthManager>();
+            services.Configure<Api_AppSettingsManager>(Configuration.GetSection("AppSettings"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

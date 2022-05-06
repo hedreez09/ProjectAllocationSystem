@@ -15,6 +15,6 @@ namespace CuabProjectAllocation.Core.DTO
         [JsonPropertyName("refreshToken")]
         public RefreshToken RefreshToken { get; set; }
         [JsonPropertyName("expireAt")]
-        public string ExpirationTime { get; set; }
+        public DateTime ExpirationTime { get; set; }
     }
 }
