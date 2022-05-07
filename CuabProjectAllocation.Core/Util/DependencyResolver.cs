@@ -22,7 +22,7 @@ namespace CuabProjectAllocation.Core.Util
 
 
             //Service Managers
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAccountService, AccountService>();
             
         }
     }

@@ -15,10 +15,10 @@ namespace CuabProjectAllocation.Api.Controllers
     [ApiController]
     public class AccountController : BaseController
     {
-        private readonly IUserService _userService;
+        private readonly IAccountService _userService;
         private readonly IJwtAuthManager _jwtAuthManager;
 
-        public AccountController(IUserService userService, IJwtAuthManager jwtAuthManager)
+        public AccountController(IAccountService userService, IJwtAuthManager jwtAuthManager)
         {
             _userService = userService;
             _jwtAuthManager = jwtAuthManager;
@@ -78,27 +78,7 @@ namespace CuabProjectAllocation.Api.Controllers
             }
         }
 
-        [HttpPost, Route("student/create")]
-        [ProducesResponseType(typeof(ApiResult), 200)]
-        [ProducesResponseType(typeof(ErrorResponse), 400)]
-        public async Task<IActionResult> CreateStudentProfile(StaffProfileDto payload)
-        {
-            var result = new ApiResult<string>();
-            var resp = await _userService.StudentAccountCreation(payload, ClientIP);
-            if(resp.Item1)
-            {
-                result.requestStatus = 200;
-                result.data = "Record Uploaded Successfully";   
-                return Ok(result);
-            }
-            else
-            {
-                result.requestStatus = 400;
-                result.error = resp.Item2;
-                result.hasMessage = true;
-                return BadRequest(result);
-            }                                   
-        }
+       
 
 
     }

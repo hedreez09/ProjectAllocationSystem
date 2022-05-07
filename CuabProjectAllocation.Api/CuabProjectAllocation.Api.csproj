@@ -17,4 +17,8 @@
     <ProjectReference Include="..\CuabProjectAllocation.Core\CuabProjectAllocation.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Files\Documents\" />
+  </ItemGroup>
+
 </Project>

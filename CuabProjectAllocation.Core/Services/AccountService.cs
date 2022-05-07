@@ -17,86 +17,21 @@ using System.Collections.Generic;
 
 namespace CuabProjectAllocation.Core.Services
 {
-    public class UserService: IUserService
+    public class AccountService: IAccountService
     {
         private readonly IEntityRepository<ApplicationUser> _appUserRepository;
         private readonly IEntityRepository<Student> _studentRepository;
         private readonly IEntityRepository<Lecturer> _LecturerRepository;
-        private readonly IOptions<Api_AppSettingsManager> _appSettings;
+        private readonly IOptions<AppSettings> _appSettings;
 
-        public UserService(IEntityRepository<ApplicationUser> appUserRepository, IEntityRepository<Student> studentRepository, IOptions<Api_AppSettingsManager> appSettings, IEntityRepository<Lecturer> lecturerRepository)
+        public AccountService(IEntityRepository<ApplicationUser> appUserRepository, IEntityRepository<Student> studentRepository, IOptions<AppSettings> appSettings, IEntityRepository<Lecturer> lecturerRepository)
         {
             _appUserRepository = appUserRepository;
             _studentRepository = studentRepository;
             _appSettings = appSettings;
             _LecturerRepository = lecturerRepository;
         }
-
-        public async Task<Tuple<bool, ErrorResponse>> StudentAccountCreation(StaffProfileDto request, string ipAddress)
-        {
-            bool success = false;
-            ErrorResponse error = new ErrorResponse();
-
-            try
-            {
-                var validator = new ProfileCreationValidator();
-                ValidationResult validationResult = validator.Validate(request);
-                if (!validationResult.IsValid)
-                    throw new CustomException($"{helper.ResolveFlValidationErrorToStr(validationResult.Errors)}");                
-
-                var userObj = await _appUserRepository.GetByAsync(x => x.Username == request.MatricNumber.ToLower() 
-                                    && x.EmailAddress == request.Email);
-                if (userObj != null)
-                    throw new CustomException("Matric number/Email exists, kindly check and try again");
-
-                var applicationUser = new ApplicationUser
-                {
-                    AccountConfirmationStatus = RegistrationStatusEnum.Pending,
-                    EmailAddress = request.Email,
-                    CreatedBy = request.FullName.ToUpper(),
-                    CreatedByIp = ipAddress,
-                    CreatedDate = DateTime.Now,
-                    IsDeleted = false,
-                    Status = true,
-                    Username = request.MatricNumber.ToLower(),
-                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
-                    UserType = request.UserType
-                };
-
-                var resp = _appUserRepository.Insert(applicationUser);
-                if (resp == 0)
-                    throw new CustomException("Something went wrong, pls try again later");
-
-                var studentObj = new Student
-                {
-                    CreatedBy = request.FullName.ToUpper(),
-                    CreatedByIp = ipAddress,
-                    CreatedDate = DateTime.Now,
-                    Department = request.Department,
-                    Email = request.Email,
-                    FullName = request.FullName,
-                    Gender = request.Gender,
-                    IsDeleted = false,
-                    MatricNumber = request.MatricNumber.ToUpper(),
-                    PhoneNumber = request.MobileNumber
-                };
-
-               _studentRepository.Insert(studentObj);
-                success = true;      
-            }
-            catch(CustomException ex)
-            {
-                error.Errors.Add(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                ex.ToString();
-                error.Errors.Add("Oops..Something went wrong...pls try again");
-            }
-
-
-            return new Tuple<bool, ErrorResponse>(success, error);
-        }
+       
 
         public async Task<Tuple<UserResponseDto, ErrorResponse>> ValidateCredential(string username, string password)
         {

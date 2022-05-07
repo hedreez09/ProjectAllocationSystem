@@ -48,5 +48,18 @@ namespace CuabProjectAllocation.Core.Util
 
             return Convert.ToInt64(pos);
         }
+
+        public static string GenerateRandomNumberV2(int size)
+        {
+            using(var crypto = new RNGCryptoServiceProvider())
+            {
+                var bits = (size * 6);
+                var byte_size = ((bits + 7) / 8);
+                var byteArray = new byte[byte_size];
+                crypto.GetBytes(byteArray);
+
+                return Convert.ToBase64String(byteArray);
+            }
+        }
     }
 }

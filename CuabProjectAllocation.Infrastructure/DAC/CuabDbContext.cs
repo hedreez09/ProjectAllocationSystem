@@ -20,6 +20,8 @@ namespace CuabProjectAllocation.Infrastructure.DAC
         public virtual DbSet<ProposalEntry> ProposalEntries { get; set; }
         public virtual DbSet<ProposalRequest> ProposalRequests { get; set; }
         public virtual DbSet<Student> Students { get; set; }
+        public virtual DbSet<ValidationToken> ValidationTokens { get; set; }
+        public virtual DbSet<EmailTemplate> EmailTemplates { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,6 +30,8 @@ namespace CuabProjectAllocation.Infrastructure.DAC
             modelBuilder.ApplyConfiguration(new StudentConfiguration());
             modelBuilder.ApplyConfiguration(new ProposalEntriesConfiguration());
             modelBuilder.ApplyConfiguration(new ProposalRequestConfiguration());
+            modelBuilder.ApplyConfiguration(new EmailTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new ValidationTokenConfiguration());
         }
 
     }

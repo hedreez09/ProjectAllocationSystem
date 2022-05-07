@@ -4,14 +4,16 @@ using CuabProjectAllocation.Infrastructure.DAC;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CuabProjectAllocation.Infrastructure.Migrations
 {
     [DbContext(typeof(CuabDbContext))]
-    partial class CuabDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220506175041_Tbl_EmailTemplate")]
+    partial class Tbl_EmailTemplate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,50 +89,6 @@ namespace CuabProjectAllocation.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ApplicationUsers");
-                });
-
-            modelBuilder.Entity("CuabProjectAllocation.Infrastructure.Entities.EmailTemplate", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Body")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreatedByIp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("MailType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ModifiedByIp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Subject")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EmailTemplates");
                 });
 
             modelBuilder.Entity("CuabProjectAllocation.Infrastructure.Entities.Lecturer", b =>
@@ -370,58 +328,6 @@ namespace CuabProjectAllocation.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Students");
-                });
-
-            modelBuilder.Entity("CuabProjectAllocation.Infrastructure.Entities.ValidationToken", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreatedByIp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateConsumed")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateExpired")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateGenerated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsConsumed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ModifiedByIp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TokenValue")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ValidationTokens");
                 });
 
             modelBuilder.Entity("CuabProjectAllocation.Infrastructure.Entities.ProposalEntry", b =>
