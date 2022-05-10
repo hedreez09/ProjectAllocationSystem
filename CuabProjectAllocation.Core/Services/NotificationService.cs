@@ -5,16 +5,33 @@ using System;
 using System.Threading.Tasks;
 using CuabProjectAllocation.Core.Util;
 using MailKit.Net.Smtp;
+using CuabProjectAllocation.Infrastructure.DAC;
+using CuabProjectAllocation.Infrastructure.Entities;
+using CuabProjectAllocation.Infrastructure.Enums;
 
 namespace CuabProjectAllocation.Core.Services
 {
     public class NotificationService : INotificationService
     {
         private readonly IOptions<AppSettings> _appSettings;
+        private readonly IEntityRepository<EmailTemplate> _emailRepository;
 
-        public NotificationService(IOptions<AppSettings> appSettings)
+        public NotificationService(IOptions<AppSettings> appSettings, IEntityRepository<EmailTemplate> emailRepository)
         {
             _appSettings = appSettings;
+            _emailRepository = emailRepository;
+        }
+
+        public async Task<(string subject, string body)> GetEmailTemplate(MailTypeEnum mailType)
+        {
+            string sub = "";
+            string bdy = "";
+            var result = await _emailRepository.GetByAsync(x => x.MailType == mailType);
+            
+            sub = result?.Subject;
+            bdy = result?.Body;
+            
+            return (sub, bdy);            
         }
 
         public async Task<bool> SendEmail(string subject, string body, string recepient)
@@ -37,6 +54,9 @@ namespace CuabProjectAllocation.Core.Services
                     Text = body,
                 };
 
+                if (_appSettings.Value.Dev_Env == "TEST")
+                    return true;
+
                 using(var client = new SmtpClient())
                 {
                     client.Timeout = 30000;
@@ -53,6 +73,7 @@ namespace CuabProjectAllocation.Core.Services
             }
             catch (Exception ex)
             {
+                ex.ToString();
                 result = false;
             }
 

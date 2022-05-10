@@ -23,4 +23,14 @@ namespace CuabProjectAllocation.Infrastructure.Configuration
             builder.Property(t => t.PasswordHash).IsRequired().HasMaxLength(250);
         }
     }
+
+    public class LoginHistoryConfiguration : IEntityTypeConfiguration<LoginHistory>
+    {
+        public void Configure(EntityTypeBuilder<LoginHistory> builder)
+        {
+            builder.HasKey(x => x.Id);
+
+            builder.Property(x => x.Username).IsRequired();
+        }
+    }
 }

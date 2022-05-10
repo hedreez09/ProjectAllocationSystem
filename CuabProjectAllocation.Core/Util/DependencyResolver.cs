@@ -19,6 +19,7 @@ namespace CuabProjectAllocation.Core.Util
             services.AddScoped<IEntityRepository<ApplicationUser>, EntityRepository<ApplicationUser>>();
             services.AddScoped<IEntityRepository<Student>, EntityRepository<Student>>();
             services.AddScoped<IEntityRepository<Lecturer>, EntityRepository<Lecturer>>();
+            services.AddScoped<IEntityRepository<LoginHistory>, EntityRepository<LoginHistory>>();
 
 
             //Service Managers

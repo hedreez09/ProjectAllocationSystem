@@ -10,6 +10,8 @@ namespace CuabProjectAllocation.Core.Util
 {
     public static class helper
     {
+        static RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
+
         public static string ResolveFlValidationErrorToStr(List<ValidationFailure> validationResult)
         {
             string result = "";
@@ -48,8 +50,8 @@ namespace CuabProjectAllocation.Core.Util
 
             return Convert.ToInt64(pos);
         }
-
-        public static string GenerateRandomNumberV2(int size)
+            
+        public static string GenerateAlphaNumberic(int size)
         {
             using(var crypto = new RNGCryptoServiceProvider())
             {
@@ -60,6 +62,44 @@ namespace CuabProjectAllocation.Core.Util
 
                 return Convert.ToBase64String(byteArray);
             }
+        }
+
+        //public static string GenerateAlphaNumberic(int passLength, int passwordSize)
+        //{
+        //    string CapitalLetters = "QWERTYUIOPASDFGHJKLZXCVBNM";
+        //    string SmallLetters = "qwertyuiopasdfghjklzxcvbnm";
+        //    string Digits = "01234567890";
+        //    //string SpecialCharacters = "!@#$%^&*()-_=+<,>.";
+        //    string AllChar = CapitalLetters + SmallLetters + Digits; //+ SpecialCharacters;
+
+        //    StringBuilder sb = new StringBuilder();
+
+        //    for(int i = 0; i < passwordSize; i++)
+        //    {
+        //        sb = sb.Append(GenerateChar(AllChar));
+        //        //for (int n = 0; n < passLength; n++)
+        //        //{
+                    
+        //        //}
+        //    }
+
+        //    return sb.ToString();
+        //}
+
+
+        private static char GenerateChar(string availableChar)
+        {
+            var byteArray = new byte[1];
+            char c;
+
+            do
+            {
+                provider.GetBytes(byteArray);
+                c = (char)byteArray[0];
+            }
+            while (!availableChar.Any(x => x == c));
+
+            return c;
         }
     }
 }

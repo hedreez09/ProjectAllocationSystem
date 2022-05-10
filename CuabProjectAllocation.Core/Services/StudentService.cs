@@ -20,14 +20,16 @@ namespace CuabProjectAllocation.Core.Services
         private readonly IEntityRepository<ApplicationUser> _appUserRepository;
         private readonly IEntityRepository<Student> _studentRepository;
         private readonly IEntityRepository<Lecturer> _LecturerRepository;
+        private readonly INotificationService _notificationService;
 
-        public StudentService(IEntityRepository<ApplicationUser> appUserRepository, IEntityRepository<Student> studentRepository, IEntityRepository<Lecturer> lecturerRepository)
+        public StudentService(IEntityRepository<ApplicationUser> appUserRepository, IEntityRepository<Student> studentRepository, IEntityRepository<Lecturer> lecturerRepository, INotificationService notificationService)
         {
             _appUserRepository = appUserRepository;
             _studentRepository = studentRepository;
             _LecturerRepository = lecturerRepository;
+            _notificationService = notificationService;
         }
-             
+
 
         public async Task<Tuple<bool, ErrorResponse>> StudentAccountCreation(StaffProfileDto request, string ipAddress)
         {
@@ -46,7 +48,7 @@ namespace CuabProjectAllocation.Core.Services
                 if (userObj != null)
                     throw new CustomException("Matric number/Email exists, kindly check and try again");
 
-                var randomPassword = helper.GenerateRandomNumberV2(8);
+                var randomPassword = helper.GenerateAlphaNumberic(10);
                 var applicationUser = new ApplicationUser
                 {
                     AccountConfirmationStatus = RegistrationStatusEnum.Pending,
@@ -80,9 +82,12 @@ namespace CuabProjectAllocation.Core.Services
                 };
 
                 _studentRepository.Insert(studentObj);
-                success = true;
 
                 //send email
+                var emailTemplate = await _notificationService.GetEmailTemplate(MailTypeEnum.AccountValidationCode);
+                await _notificationService.SendEmail(emailTemplate.subject, emailTemplate.body, request.Email);
+
+                success = true;
             }
             catch (CustomException ex)
             {

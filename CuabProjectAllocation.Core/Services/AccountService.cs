@@ -23,15 +23,22 @@ namespace CuabProjectAllocation.Core.Services
         private readonly IEntityRepository<Student> _studentRepository;
         private readonly IEntityRepository<Lecturer> _LecturerRepository;
         private readonly IOptions<AppSettings> _appSettings;
+        private readonly IEntityRepository<LoginHistory> _loginHistoryRepository;
+        private readonly IEntityRepository<ValidationToken> _tokenRepository;
 
-        public AccountService(IEntityRepository<ApplicationUser> appUserRepository, IEntityRepository<Student> studentRepository, IOptions<AppSettings> appSettings, IEntityRepository<Lecturer> lecturerRepository)
+        public AccountService(IEntityRepository<ApplicationUser> appUserRepository, 
+            IEntityRepository<Student> studentRepository, IOptions<AppSettings> appSettings, 
+            IEntityRepository<Lecturer> lecturerRepository, IEntityRepository<LoginHistory> 
+            loginHistoryRepository, IEntityRepository<ValidationToken> tokenRepository)
         {
             _appUserRepository = appUserRepository;
             _studentRepository = studentRepository;
             _appSettings = appSettings;
             _LecturerRepository = lecturerRepository;
+            _loginHistoryRepository = loginHistoryRepository;
+            _tokenRepository = tokenRepository;
         }
-       
+
 
         public async Task<Tuple<UserResponseDto, ErrorResponse>> ValidateCredential(string username, string password)
         {
@@ -44,15 +51,15 @@ namespace CuabProjectAllocation.Core.Services
                 if (userObj == null)
                     throw new CustomException("Invalid Login Details");                              
 
-                if (!userObj.Status || userObj.LockoutEnabled)
-                    throw new CustomException("Your profile is not active, kindly contact admin");
+                if (userObj.LockoutEnabled)
+                    throw new CustomException("Your profile has been locked, kindly contact admin");
 
-                if (userObj.AccountConfirmationStatus == RegistrationStatusEnum.Pending)
-                    throw new CustomException("Your account is yet to be activated, kindly check your email");
+                if (!userObj.Status)
+                    throw new CustomException("Your profile is not active, kindly contact admin");
 
                 int maxPasswordTrials = Convert.ToInt32(_appSettings.Value.MaxPasswordTries);
 
-                if (userObj.FailedLoginCount > maxPasswordTrials)
+                if (userObj.FailedLoginCount >= maxPasswordTrials)
                 {
                     userObj.LockoutEnabled = true;  
                     _appUserRepository.Update(userObj);
@@ -115,6 +122,53 @@ namespace CuabProjectAllocation.Core.Services
             return new Tuple<UserResponseDto, ErrorResponse>(validationResult, errorResponse);
         }
 
+        public async Task<Tuple<bool, ErrorResponse>> ResetPassword(string username, string newPassword, string token)
+        {
+            ErrorResponse errorResponse = new ErrorResponse();
+            bool success = false;
+
+            try
+            {
+                var userObj = await _appUserRepository.GetByAsync(x => x.Username == username);
+                if (userObj == null)
+                    throw new CustomException("Invalid Username");
+
+                var tokenObj = await validateOtp(token, userObj.EmailAddress);
+                if (!tokenObj.Item1)
+                {
+                    errorResponse.Errors.Add(tokenObj.Item2);
+                    success = false;                    
+                }
+
+                var hashPassword = BCrypt.Net.BCrypt.HashPassword(newPassword);
+                userObj.PasswordHash = hashPassword;
+                _appUserRepository.Update(userObj);
+                success = true;                              
+            }
+            catch(CustomException ex)
+            {
+                errorResponse.Errors.Add(ex.Message);
+            }
+            catch(Exception e)
+            {
+                e.ToString();
+                errorResponse.Errors.Add("Oops! Something went wrong, pls try again");
+                success = false;                
+            }
+
+            return new Tuple<bool, ErrorResponse>(success, errorResponse);
+        }
+
+
+        public async Task<bool> ActivatePasswordReset(string username)
+        {
+            var resp = await _loginHistoryRepository.GetByAsync(x => x.Username == username);
+            if(resp == null) 
+               return true;
+
+            return false;
+        }
+
         public Claim[] SetUserClaims(UserResponseDto claimsObj)
         {
             var userClaims = new List<Claim>()
@@ -128,6 +182,27 @@ namespace CuabProjectAllocation.Core.Services
             };
 
             return userClaims.ToArray();
+        }
+
+
+        #region Private Methods
+
+        private async Task<Tuple<bool, string>> validateOtp(string otp, string email)
+        {
+            //bool valid = false;
+            //string success = "";
+
+            var tokenObj = await _tokenRepository.GetByAsync(x => x.Email == email && x.TokenValue == otp);
+            if(tokenObj == null)
+                return new Tuple<bool, string>(false, "Invalid OTP");
+
+            var expiry = tokenObj.DateExpired;
+            var now = DateTime.Now;
+
+            if (now > expiry)
+                return new Tuple<bool, string>(false, "OTP no longer valid");
+
+            return new Tuple<bool, string>(true, "OTP Valid");
         }
 
         private async Task<UserResponseDto> GetStudentInfo(string username)
@@ -163,5 +238,7 @@ namespace CuabProjectAllocation.Core.Services
 
             return result;
         }
+
+        #endregion
     }
 }

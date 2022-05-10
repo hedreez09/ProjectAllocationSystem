@@ -1,4 +1,5 @@
 ﻿using CuabProjectAllocation.Core.DTO;
+using CuabProjectAllocation.Infrastructure.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace CuabProjectAllocation.Core.Interface
 {
     public interface INotificationService
     {
+        Task<(string subject, string body)> GetEmailTemplate(MailTypeEnum mailType);
         Task<bool> SendEmail(string subject, string body, string recepient);
     }
 }

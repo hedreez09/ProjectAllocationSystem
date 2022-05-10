@@ -15,9 +15,21 @@ namespace CuabProjectAllocation.Infrastructure.Configuration
         {
             builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.MailType).IsRequired();
+            builder.Property(x => x.MailType).HasConversion<string>().IsRequired();
             builder.Property(x => x.Body).IsRequired(); 
             builder.Property(x => x.Subject).IsRequired();
+        }
+    }
+
+    public class EmailLogConfiguration : IEntityTypeConfiguration<EmailLog>
+    {
+        public void Configure(EntityTypeBuilder<EmailLog> builder)
+        {
+            builder.HasKey(x => x.Id);
+
+            builder.Property(x => x.Body).IsRequired();
+            builder.Property(x => x.Subject).IsRequired();
+            builder.Property(x => x.Recepient).IsRequired();
         }
     }
 }

@@ -4,6 +4,7 @@ using CuabProjectAllocation.Core.Util;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using CuabProjectAllocation.Core.Common;
 
 namespace CuabProjectAllocation.Api.Controllers
 {
@@ -27,17 +28,18 @@ namespace CuabProjectAllocation.Api.Controllers
             var resp = await _studentService.StudentAccountCreation(payload, ClientIP);
             if (resp.Item1)
             {
-                result.requestStatus = 200;
+                result.responseCode = Constants.Successful;
                 result.data = "Record Uploaded Successfully";
                 return Ok(result);
             }
             else
             {
-                result.requestStatus = 400;
-                result.error = resp.Item2;
-                result.hasMessage = true;
+                result.responseCode = Constants.ErrorOccured;
+                result.error = resp.Item2;                
                 return BadRequest(result);
             }
         }
+
+       
     }
 }

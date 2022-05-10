@@ -12,6 +12,8 @@ namespace CuabProjectAllocation.Core.Interface
     public interface IAccountService
     {       
         Task<Tuple<UserResponseDto, ErrorResponse>> ValidateCredential(string username, string password);
+        Task<bool> ActivatePasswordReset(string username);
+
         Claim[] SetUserClaims(UserResponseDto claimsObj);
     }
 }

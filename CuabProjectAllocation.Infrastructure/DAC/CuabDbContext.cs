@@ -22,6 +22,8 @@ namespace CuabProjectAllocation.Infrastructure.DAC
         public virtual DbSet<Student> Students { get; set; }
         public virtual DbSet<ValidationToken> ValidationTokens { get; set; }
         public virtual DbSet<EmailTemplate> EmailTemplates { get; set; }
+        public virtual DbSet<EmailLog> EmailLogs { get; set; }
+        public virtual DbSet<LoginHistory> LoginHistories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,6 +34,8 @@ namespace CuabProjectAllocation.Infrastructure.DAC
             modelBuilder.ApplyConfiguration(new ProposalRequestConfiguration());
             modelBuilder.ApplyConfiguration(new EmailTypeConfiguration());
             modelBuilder.ApplyConfiguration(new ValidationTokenConfiguration());
+            modelBuilder.ApplyConfiguration(new EmailLogConfiguration());
+            modelBuilder.ApplyConfiguration(new LoginHistoryConfiguration());
         }
 
     }

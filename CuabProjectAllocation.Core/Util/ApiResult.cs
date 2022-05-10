@@ -16,11 +16,10 @@ namespace CuabProjectAllocation.Core.Util
         public ApiResult()
         {
             timeGenerated = DateTime.Now;
-            eventId = helper.GenerateRadomNumber().ToString();            
+            eventId = Guid.NewGuid().ToString();            
         }
-        public ErrorResponse error { get; set; }
-        public bool hasMessage { get; set; }    
-        public int requestStatus { get; set; }
+        public ErrorResponse error { get; set; }        
+        public string responseCode { get; set; }
         public DateTime  timeGenerated { get; set; }
         public string eventId { get; set; }
     }

@@ -10,6 +10,8 @@ namespace CuabProjectAllocation.Infrastructure.Enums
     {
         StudentEmailConfirmation,
         StaffEmailConfirmation,
-        PasswordReset
+        AccountValidationCode,
+        PasswordReset,
+        AccountCreation
     }
 }

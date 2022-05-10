@@ -1,4 +1,5 @@
-﻿using CuabProjectAllocation.Core.DTO;
+﻿using CuabProjectAllocation.Core.Common;
+using CuabProjectAllocation.Core.DTO;
 using CuabProjectAllocation.Core.Interface;
 using CuabProjectAllocation.Core.Util;
 using CuabProjectAllocation.Core.Validators;
@@ -34,22 +35,28 @@ namespace CuabProjectAllocation.Api.Controllers
                 var validator = new LoginValidator();
                 ValidationResult validationResult = await validator.ValidateAsync(request);
                 if (!validationResult.IsValid)
-                {
-                    result.hasMessage = true;
+                {                    
                     result.error.Errors.Add(helper.ResolveFlValidationErrorToStr(validationResult.Errors));
-                    result.requestStatus = 400;
+                    result.responseCode = Constants.InputValidationError;
                     return BadRequest(result);
                 }
 
                 var validateCredentials = await _userService.ValidateCredential(request.username, request.password);
                 if(validateCredentials.Item2 != null)
                 {
-                    var errorMsg = validateCredentials.Item2;
-                    result.hasMessage = true;
+                    var errorMsg = validateCredentials.Item2;                    
                     result.error = errorMsg;
-                    result.requestStatus = 400;
+                    result.responseCode = Constants.ErrorOccured;
                     return BadRequest(result);
                 }
+
+                var isPasswordReset = await _userService.ActivatePasswordReset(request.username);
+                if (isPasswordReset)
+                {
+                    result.responseCode = Constants.ResetPassword;
+                    return Ok(result);
+                }
+
 
                 var userInfo = validateCredentials.Item1;
                 var claims = _userService.SetUserClaims(userInfo);
@@ -64,21 +71,25 @@ namespace CuabProjectAllocation.Api.Controllers
                 };
 
                 result.data = loginResult;
-                result.requestStatus = 200;               
+                result.responseCode = Constants.Successful;               
                 return Ok(result);
 
             }
             catch(Exception ex)
             {
-                ex.ToString();
-                result.hasMessage = true;
+                ex.ToString();                
                 result.error.Errors.Add("Ooops!! Something went wrong, pls try again");
-                result.requestStatus = 400;
+                result.responseCode = Constants.SomethingWentWrong;
                 return BadRequest(result);
             }
         }
 
-       
+
+        [HttpGet, Route("confirm")]
+        public async Task<IActionResult> AccountConfirmation(string email)
+        {
+            return Ok();
+        }
 
 
     }
